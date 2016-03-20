@@ -1,0 +1,46 @@
+---
+- name: Add postgres signing key
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+  register: postgres_key_installed
+
+- name: Add postgres deb repo
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' state=present
+  when: postgres_key_installed|success
+  register: postgres_repo_installed
+
+- name: Install postgresql-9.3
+  apt: name=postgresql-9.3 update_cache=yes state=present
+  when: postgres_repo_installed|success
+  register: postgres_installed
+
+- name: Install liblwgeom-2.1.3
+  apt: name=liblwgeom-2.1.3 update_cache=yes state=present
+
+- name: Install postgresql-9.3-postgis-2.1
+  apt: name=postgresql-9.3-postgis-2.1 update_cache=yes state=present
+  when: postgres_installed|success
+
+- name: Install postgresql-9.3-postgis-2.1-scripts
+  apt: name=postgresql-9.3-postgis-2.1-scripts update_cache=yes state=present
+  when: postgres_installed|success
+
+- name: Install postgresql-server-dev-9.3
+  apt: name=postgresql-server-dev-9.3 update_cache=yes state=present
+  when: postgres_installed|success
+
+- name: Install postgis
+  apt: name=postgis update_cache=yes state=present
+  when: postgres_installed|success
+
+- name: Create pg_hba.conf
+  template: src=pg_hba.j2 dest=/etc/postgresql/9.3/main/pg_hba.conf backup=yes
+  when: postgres_installed|success
+  notify: Restart postgres
+
+- name: Create pg_ident.conf
+  template: src=pg_ident.j2 dest=/etc/postgresql/9.3/main/pg_ident.conf backup=yes
+  when: postgres_installed|success
+  notify:
+    - Restart postgres
+
+- meta: flush_handlers

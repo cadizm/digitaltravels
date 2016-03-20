@@ -1,0 +1,6 @@
+---
+- name: Configure redis unix socket
+  raw: >
+    echo "unixsocket /var/run/redis/redis.sock" >> /etc/redis/redis.conf
+    echo "unixsocketperm 755" >> /etc/redis/redis.conf
+    service redis-server restart

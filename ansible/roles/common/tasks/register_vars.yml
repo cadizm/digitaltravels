@@ -1,0 +1,5 @@
+---
+- name: Determine PYTHON_LOCAL_DIST_PACKAGES
+  shell: python -c 'import site; print site.getsitepackages()[0]'
+  register: _PYTHON_LOCAL_DIST_PACKAGES
+  tags: db

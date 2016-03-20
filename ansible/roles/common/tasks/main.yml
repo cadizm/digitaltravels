@@ -1,0 +1,46 @@
+---
+- include: register_vars.yml
+
+- name: Add pip
+  apt: name=python-pip update_cache=yes state=latest
+
+- name: Install supervisor
+  apt: name=supervisor update_cache=yes state=present
+  notify: Restart supervisor
+
+- name: Install python-dev
+  apt: name=python-dev update_cache=yes state=present
+
+- name: Install libyaml-dev
+  apt: name=libyaml-dev update_cache=yes state=present
+
+- name: Install libyaml-cpp-dev
+  apt: name=libyaml-cpp-dev update_cache=yes state=present
+
+- name: Install libpq-dev
+  apt: name=libpq-dev update_cache=yes state=present
+
+- name: Install python-psycopg2
+  apt: name=python-psycopg2 update_cache=yes state=present
+
+- name: Install libgdal-dev
+  apt: name=libgdal-dev update_cache=yes state=present
+
+- name: Install python-gdal
+  apt: name=python-gdal update_cache=yes state=present
+
+- name: Install libmxml-dev
+  apt: name=libmxml-dev update_cache=yes state=present
+
+- name: Install libxslt1-dev
+  apt: name=libxslt1-dev update_cache=yes state=present
+
+- name: Install python-lxml
+  apt: name=python-lxml update_cache=yes state=present
+
+- name: Install redis-server
+  apt: name=redis-server update_cache=yes state=present
+  notify: Configure redis unix socket
+
+- name: Install redis-tools
+  apt: name=redis-tools update_cache=yes state=present

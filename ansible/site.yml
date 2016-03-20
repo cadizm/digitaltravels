@@ -1,0 +1,11 @@
+---
+-
+  hosts: all
+  sudo: True
+  vars:
+    - HOME: "{{ lookup('env','HOME') }}"
+    - IDENT_AUTH_USER: mcadiz
+  roles:
+    - common
+    - nginx
+    - postgres

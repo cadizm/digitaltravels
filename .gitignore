@@ -1,2 +1,4 @@
 .vagrant
 ifeth1
+ansible/inventory/digitalocean
+ansible/site.retry

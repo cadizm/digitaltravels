@@ -1,0 +1,9 @@
+---
+- name: Install oidentd
+  apt: name=oidentd update_cache=yes state=present
+
+- name: Create oidentd.conf
+  template: src=oidentd.j2 dest=/etc/oidentd.conf backup=yes
+  notify: Restart oidentd
+
+- meta: flush_handlers

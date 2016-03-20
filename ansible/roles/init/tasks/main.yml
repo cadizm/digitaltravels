@@ -1,0 +1,32 @@
+---
+
+# for mkpasswd
+- name: Install whois
+  apt: name=whois state=present
+
+- name: Add user mcadiz
+  user: name=mcadiz shell=/bin/bash
+
+- name: Update /etc/sudoers editor
+  lineinfile: dest=/etc/sudoers regexp='^Defaults\s+editor' line='Defaults  editor=/usr/bin/vim' validate='visudo -cf %s'
+
+- name: Update /etc/sudoers mcadiz
+  lineinfile: "dest=/etc/sudoers state=present regexp='^mcadiz' line='mcadiz ALL=(ALL) NOPASSWD: ALL' validate='visudo -cf %s'"
+
+- name: Update /etc/ssh/sshd_config PasswordAuthentication
+  lineinfile: dest=/etc/ssh/sshd_config regexp=^PasswordAuthentication line='PasswordAuthentication no' backup=yes
+
+- name: Update /etc/ssh/sshd_config RSAAuthentication
+  lineinfile: dest=/etc/ssh/sshd_config regexp=^RSAAuthentication line='RSAAuthentication yes' backup=yes
+
+- name: Update /etc/ssh/sshd_config PubkeyAuthentication
+  lineinfile: dest=/etc/ssh/sshd_config regexp=^PubkeyAuthentication line='PubkeyAuthentication yes' backup=yes
+
+- name: Update /etc/ssh/sshd_config PermitRootLogin
+  lineinfile: dest=/etc/ssh/sshd_config regexp=^PermitRootLogin line='PermitRootLogin no' backup=yes
+
+- name: Update /etc/ssh/sshd_config AllowUsers
+  lineinfile: dest=/etc/ssh/sshd_config regexp=^AllowUsers line='AllowUsers mcadiz' backup=yes
+
+- name: Update /etc/ssh/sshd_config AllowUsers
+  service: name=ssh state=restarted
